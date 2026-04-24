@@ -1,0 +1,160 @@
+{
+  "info": {
+    "_postman_id": "f2b9d1d4-0cf3-4f4e-a727-2f9f10000001",
+    "name": "Backend API Flow",
+    "description": "Flux complet: register, login, saveToken, virement.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Register Alice",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alice\",\n  \"email\": \"{{aliceEmail}}\",\n  \"password\": \"{{alicePassword}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Register Alice OK', function () {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "try {",
+              "  var data = pm.response.json();",
+              "  if (data && data.id) { pm.collectionVariables.set('aliceId', data.id); }",
+              "} catch (e) {}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Register Bob",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Bob\",\n  \"email\": \"{{bobEmail}}\",\n  \"password\": \"{{bobPassword}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "register"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Register Bob OK', function () {",
+              "  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              "try {",
+              "  var data = pm.response.json();",
+              "  if (data && data.id) { pm.collectionVariables.set('bobId', data.id); }",
+              "} catch (e) {}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth - Login Alice",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{aliceEmail}}\",\n  \"password\": \"{{alicePassword}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Token - Save Alice FCM token",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "auth": {
+          "type": "basic",
+          "basic": [
+            { "key": "username", "value": "{{aliceEmail}}", "type": "string" },
+            { "key": "password", "value": "{{alicePassword}}", "type": "string" }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": {{aliceId}},\n  \"fcmToken\": \"{{aliceFcmToken}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/saveToken",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "saveToken"]
+        }
+      }
+    },
+    {
+      "name": "Transaction - Virement Alice -> Bob",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "auth": {
+          "type": "basic",
+          "basic": [
+            { "key": "username", "value": "{{aliceEmail}}", "type": "string" },
+            { "key": "password", "value": "{{alicePassword}}", "type": "string" }
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": {{aliceId}},\n  \"amount\": {{virementAmount}},\n  \"destinataireId\": {{bobId}}\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transaction/virement",
+          "host": ["{{baseUrl}}"],
+          "path": ["transaction", "virement"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "aliceEmail", "value": "alice@test.com" },
+    { "key": "alicePassword", "value": "123456" },
+    { "key": "bobEmail", "value": "bob@test.com" },
+    { "key": "bobPassword", "value": "123456" },
+    { "key": "aliceId", "value": "1" },
+    { "key": "bobId", "value": "2" },
+    { "key": "aliceFcmToken", "value": "token_test_alice_1" },
+    { "key": "virementAmount", "value": "500" }
+  ]
+}
+

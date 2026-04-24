@@ -1,0 +1,41 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### SSL ###
+src/main/resources/kafka.client.truststore.jks
+src/main/resources/kafka.client.keystore.jks
+src/main/resources/test-4b623-firebase-adminsdk-fbsvc-87089ff908.json
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+src\main\resources\fir-pfe-95083-firebase-adminsdk-fbsvc-d6ac9d1bae.json
+.env 
