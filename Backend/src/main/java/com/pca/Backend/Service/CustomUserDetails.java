@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.User;
 import java.util.ArrayList;
 
 import com.pca.Backend.DTO.SignUp;
-import com.pca.Backend.Entity.UserEntity;
+import com.pca.Backend.Entity.ReferentielUser;
 import com.pca.Backend.Repo.UserRepo;
 
 import lombok.RequiredArgsConstructor;
@@ -22,15 +22,15 @@ public class CustomUserDetails implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        ReferentielUser user = userRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
-    public UserEntity signUp(SignUp signUp) {
+    public ReferentielUser signUp(SignUp signUp) {
         userRepo.findByEmail(signUp.email()).ifPresent(existing -> {
             throw new RuntimeException("User already exists");
         });
 
-        UserEntity newUser = new UserEntity();
+        ReferentielUser newUser = new ReferentielUser();
         newUser.setName(signUp.name());
         newUser.setEmail(signUp.email());
         newUser.setPassword(passwordEncoder.encode(signUp.password()));

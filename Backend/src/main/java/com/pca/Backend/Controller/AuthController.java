@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.pca.Backend.DTO.LoginDto;
 import com.pca.Backend.DTO.SignUp;
-import com.pca.Backend.Entity.UserEntity;
+import com.pca.Backend.Entity.ReferentielUser;
 import com.pca.Backend.Service.ServiceAuth;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AuthController {
     private final ServiceAuth auth;
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody SignUp signUp){
-        UserEntity user = (UserEntity) auth.signUp(signUp);
+        ReferentielUser user = auth.signUp(signUp);
         return ResponseEntity.ok(user);
     }
    @PostMapping("/login")

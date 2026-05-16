@@ -1,34 +1,31 @@
 package com.pca.Backend.Entity;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
-@Data
-@NoArgsConstructor
+@Table(name="carte")
 @AllArgsConstructor
-public class UserEntity {
+@NoArgsConstructor
+@Data
+@Builder
+public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    @Column(name="email", unique = true)
-    private String email;
-    @JsonIgnore
-    private String password;
-    @Column(name="fcmToken", columnDefinition="TEXT")
-    private String fcmToken;
-    private LocalDateTime updatedToken = LocalDateTime.now();
+    private Long userId;
+    private StatusCard statusCard;
+    private Long minAmount;
+    private String cardType;
+    private LocalDateTime dateCreation = LocalDateTime.now();
 }

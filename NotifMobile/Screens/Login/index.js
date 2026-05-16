@@ -18,11 +18,11 @@ const Login = ({ navigation }) => {
       if (!userId) throw new Error('ID utilisateur manquant dans la réponse de connexion');
       dispatch(setUserId(userId));
 
-      await Notification.requestPermission();
+      /*await Notification.requestPermission();
       const token = await Notification.getToken();
       if (token) {
         await saveToken({ userId, token });
-      }
+      }*/
 
       navigation.replace('Home');
     } catch (error) {

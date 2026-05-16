@@ -70,6 +70,7 @@ class Notification {
 
   static async displayNotification(remoteMessage) {
     try {
+      console.log('remoteMessage:', JSON.stringify(remoteMessage, null, 2));
       if (!remoteMessage?.data) {
         return;
       }
@@ -85,7 +86,7 @@ class Notification {
           pressAction: {
             id: 'default',
           },
-          color: remoteMessage.data.critical === "true" ? 'red' : 'blue',
+          color: remoteMessage.data.critical === "true" ? '#ff0000' : '#2196f3',
         },
       });
     } catch (error) {
@@ -94,12 +95,18 @@ class Notification {
   }
   static foregroundHandler = async ( )=> {
     messaging().onMessage(async remoteMessage => {
+      console.log('Foreground message received:', JSON.stringify(remoteMessage, null, 2));
+      console.log('Data:', remoteMessage.data);
+      console.log('Montant:', remoteMessage.data?.montant);
       await this.displayNotification(remoteMessage);
     }
     );
   }
   static backgroundHandler = async () => {
     messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.log('Background message received:', JSON.stringify(remoteMessage, null, 2));
+        console.log('Data:', remoteMessage.data);
+        console.log('Montant:', remoteMessage.data?.montant);
         await this.displayNotification(remoteMessage);
     });
   }

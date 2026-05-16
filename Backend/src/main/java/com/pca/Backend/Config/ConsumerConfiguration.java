@@ -34,7 +34,6 @@ public class ConsumerConfiguration {
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setPollTimeout(4000L);
         factory.setConcurrency(3);
-        factory.setBatchListener(true);
         return factory;
     }
     @Bean(name="fraudeListenerContainerFactory")

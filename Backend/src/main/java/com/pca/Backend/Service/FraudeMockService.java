@@ -7,7 +7,7 @@ import com.pca.Backend.DTO.VirementDTO;
 @Service
 public class FraudeMockService {
     public boolean isFraudVirement(VirementDTO virementDTO){
-        if(virementDTO.amount() > 1000000){
+        if(virementDTO.amount() > 100000){
             return true;
         }
          if(Math.random() < 0.2){

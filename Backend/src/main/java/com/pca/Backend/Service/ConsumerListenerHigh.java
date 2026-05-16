@@ -1,47 +1,38 @@
 package com.pca.Backend.Service;
-
-import org.springframework.kafka.annotation.BackOff;
-import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.annotation.RetryableTopic;
-import org.springframework.kafka.retrytopic.TopicSuffixingStrategy;
-import org.springframework.kafka.support.KafkaHeaders;
-import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.messaging.handler.annotation.Headers;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.pca.Backend.Entity.ReferentielAlerte;
+import com.pca.Backend.Repo.ReferentielAlerteRepo;
 
 import lombok.RequiredArgsConstructor;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ConsumerListenerHigh {
-    private final NotificationService notificationService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private ObjectMapper objectMapper = new ObjectMapper();
-    @RetryableTopic(attempts = "3", autoCreateTopics = "true", 
-    backOff = @BackOff(delay = 1000, multiplier = 2), topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE
-    )
+    private final ReferentielAlerteRepo repo;
     @KafkaListener(topics="notification.public.fraude", groupId = "highPriority", containerFactory = "fraudeListenerContainerFactory")
     public void consumeHighPrio(String message){
        try{
           JsonNode json = objectMapper.readTree(message);
-          Long userId = json.get("userId").asLong();
-          Long amount = json.get("amount").asLong()
-          String alertType = json.get("alertType").asText();
-          String alertMessage = json.get("alertMessage").asText();
-          notificationService.sendNotification(userId, alertMessage, amount, true);
+                Long userId = json.path("user_id").asLong();
+               ReferentielAlerte alerte = repo.findByClientId(userId).orElse(null);
+               if(alerte != null && alerte.isAlerteFraude()){
+                    kafkaTemplate.send("fraude-intermediare", message);
+               }    
+               else {
+                return;
+               }
        }
-       catch (JsonProcessingException e){
-             System.err.print(e.getMessage());
+       catch (Exception e){
+             throw new IllegalStateException("Echec traitement fraude", e);
        }
-      System.out.printf("le message envoyé est: %d", message);
-    }
-    @DltHandler
-    public void handleMessage(String message, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic){
-        System.err.printf("le %s message est envoye au topic %s", message, topic);
     }
      
 }
