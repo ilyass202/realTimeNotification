@@ -30,9 +30,10 @@ public class ConsumerListenerCardEvent {
     public void consumer(String message) {
         try {
             JsonNode json = objectMapper.readTree(message);
-            Long userId = json.path("userId").asLong();
+            System.out.printf("le message %s", message);
+            Long userId = json.path("user_id").asLong();
             ReferentielAlerte ref = referentielAlerteRepo.findByClientId(userId).orElse(null);
-            if (ref != null && ref.isAlerteTransaction()) {
+            if (ref != null && ref.isAlerteCarte()) {
                 kafkaTemplate.send("card-intermediare", message);
             }
         } catch (JsonProcessingException e) {

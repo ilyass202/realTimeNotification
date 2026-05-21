@@ -21,6 +21,7 @@ public class ConsumerListenerHigh {
     public void consumeHighPrio(String message){
        try{
           JsonNode json = objectMapper.readTree(message);
+          System.out.printf("le message est %s", message);
                 Long userId = json.path("user_id").asLong();
                ReferentielAlerte alerte = repo.findByClientId(userId).orElse(null);
                if(alerte != null && alerte.isAlerteFraude()){

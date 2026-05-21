@@ -1,5 +1,6 @@
 package com.pca.Backend.Service;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,8 +24,9 @@ public class ConsumerListenerEnriche {
     autoCreateTopics = "true", topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE
 )
     @KafkaListener(topics = "transaction-enrechissement", groupId = "enri-grp", containerFactory = "kafkaListenerContainerFactory")
-    public void consume(String message){
+    public void consume(ConsumerRecord<String, String> record){
         try{
+        String message = record.value();
         NotifEnrechi notifEnrechi = mapper.readValue(message, NotifEnrechi.class);
          notifService.sendNotification(
                     notifEnrechi.userId(),

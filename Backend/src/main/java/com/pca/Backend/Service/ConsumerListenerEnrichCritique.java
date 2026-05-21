@@ -41,7 +41,6 @@ public class ConsumerListenerEnrichCritique {
             notifService.ArchivageNotif(notifEnrechi);
             
         } catch (Exception e) {
-            log.error("Echec traitement message enrichissement critique: {}", message, e);
             throw new IllegalStateException("Echec traitement enrichissement critique", e);
         }
     }

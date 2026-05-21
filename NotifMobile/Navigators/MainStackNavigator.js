@@ -9,14 +9,31 @@ const Main = createNativeStackNavigator();
 const MainStackNavigator = () => {
   return (
     <Main.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
+      screenOptions={({ route }) => ({
+        headerShown: route.name !== 'Login' && route.name !== 'Register',
+        headerStyle: {
+          backgroundColor: '#FF8C00',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 18,
+          color: '#fff',
+        },
+      })}
     >
       <Main.Screen name='Login' component={Login} />
       <Main.Screen name='Register' component={Register} />
-      <Main.Screen name='Home' component={Home} />
-      <Main.Screen name='Preferences' component={Preferences} />
+      <Main.Screen 
+        name='Home' 
+        component={Home}
+        options={{ title: 'Accueil' }}
+      />
+      <Main.Screen 
+        name='Preferences' 
+        component={Preferences}
+        options={{ title: 'Préférences' }}
+      />
     </Main.Navigator>
   );
 };

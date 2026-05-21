@@ -5,6 +5,9 @@ const initialState = {
     transaction: true,
     payment: true,
     promotion: false,
+    security: false,
+    reminder: false,
+    creationCarte: false,
   },
 };
 
@@ -14,9 +17,7 @@ export const preferencesSlice = createSlice({
   reducers: {
     setNotificationPreference: (state, action) => {
       const { key, value } = action.payload;
-      if (state.notificationSettings.hasOwnProperty(key)) {
-        state.notificationSettings[key] = value;
-      }
+      state.notificationSettings[key] = value;
     },
     setNotificationSettings: (state, action) => {
       state.notificationSettings = {

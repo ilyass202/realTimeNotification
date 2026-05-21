@@ -34,7 +34,6 @@ class Notification {
     try {
       return await messaging().getToken();
     } catch (error) {
-      console.log('error in fetching token', error);
       return null;
     }
   }

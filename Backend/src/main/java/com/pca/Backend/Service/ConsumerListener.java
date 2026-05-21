@@ -7,6 +7,9 @@ import com.pca.Backend.Entity.ReferentielAlerte;
 import com.pca.Backend.Repo.ReferentielAlerteRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,13 +28,16 @@ public class ConsumerListener {
      @Autowired
      private ReferentielAlerteRepo referentielAlerteRepo;
     @KafkaListener(topics = "notifications.public.transactions", groupId = "notifs", containerFactory = "kafkaListenerContainerFactory")
-    public void consumer(String message){
-            try{
+    public void consumer(ConsumerRecord<String, String> consumerRecord){
+          String message = consumerRecord.value();
+        try{
                 JsonNode json = objectMapper.readTree(message);
                 Long userId = json.path("user_id").asLong();
+                Long id = json.path("id").asLong();
                 ReferentielAlerte referentielAlerte = referentielAlerteRepo.findByClientId(userId).orElse(null);
                 if(referentielAlerte != null && referentielAlerte.isAlerteTransaction()){
-                    kafkaTemplate.send("transaction-intermediare", message);
+                    ProducerRecord<String , String> producerRecord = new ProducerRecord<>("transaction-intermediare",String.valueOf(id), message );
+                    kafkaTemplate.send(producerRecord);
                 } else {
                     return;
                 }

@@ -1,6 +1,9 @@
 package com.pca.Backend.Service;
 
 import java.util.UUID;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -17,10 +20,12 @@ public class ConsumerListenerInter{
     private final KafkaTemplate<String, String> kafkaTemplate;
     private ObjectMapper mapper = new ObjectMapper();
     @KafkaListener(topics = "transaction-intermediare", groupId = "inter_grp", containerFactory="kafkaListenerContainerFactory")
-    public void consume(String message){
+    public void consume(ConsumerRecord<String, String> record){
         try{
+        String message = record.value();
         var json = mapper.readTree(message);
-        Long userId =  json.path("user_id").asLong(); 
+        Long userId =  json.path("user_id").asLong();
+        Long id = json.path("id").asLong(); 
         Long destinataireId = json.has("destinataire_id")
             ? json.path("destinataire_id").asLong()
             : json.path("destinataire").asLong();
@@ -38,8 +43,9 @@ public class ConsumerListenerInter{
             false,
             "Transaction traitée avec succès"
         );
+        ProducerRecord<String, String> recordProduced = new ProducerRecord<>("transaction-enrechissement", String.valueOf(id), mapper.writeValueAsString(notifEnrechi) );
 
-        kafkaTemplate.send("transaction-enrechissement", mapper.writeValueAsString(notifEnrechi));
+        kafkaTemplate.send(recordProduced);
     }
     catch(Exception e){
         throw new IllegalStateException("Echec consumer inter", e);

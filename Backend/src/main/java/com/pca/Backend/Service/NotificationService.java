@@ -23,14 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 public class NotificationService {
     private final UserRepo userRepo;
     private final HistoriqueNotif repoHistorique;
-    public void sendNotification(Long userId, String body, Long amount, boolean isCritical, boolean isCard) {
+    public void sendNotification(Long userId, String body, Long amount, boolean isCritical) {
         ReferentielUser user = userRepo.findById(userId).orElseThrow(()-> new EntityNotFoundException("userId nest pas trouvé"));
         if(StringUtils.isBlank(user.getFcmToken())){
             log.warn("Aucun fcmToken pour userId={}", userId);
             return;
         }
     var message = Message.builder().setToken(user.getFcmToken())
-    .putData("title", "virement")
+    .putData("title", "Notification")
     .putData("body", body)                
     .putData("montant", String.valueOf(amount))   
     .putData("screen", "Notifications")      

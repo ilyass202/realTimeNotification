@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectNotificationSettings } from '../../Store/Slices/PreferencesSlice';
+import CustomButton from '../../Components/CustomButton';
 
 const Home = ({ navigation }) => {
   const settings = useSelector(selectNotificationSettings);
@@ -18,7 +19,9 @@ const Home = ({ navigation }) => {
       <Text style={styles.status}>
         Promotions : {settings.promotion ? 'Activées' : 'Désactivées'}
       </Text>
-      <Button title='Gérer les préférences' onPress={() => navigation.navigate('Preferences')} />
+      <View style={styles.buttonContainer}>
+        <CustomButton title='Gérer les préférences' onPress={() => navigation.navigate('Preferences')} text='Gérer les préférences' />
+      </View>
     </View>
   );
 };
@@ -29,16 +32,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF8F0',
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: '#E85D04',
+    textAlign: 'center',
   },
   status: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 24,
+    color: '#333',
+    backgroundColor: '#FFE5CC',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#FF8C00',
+    width: '100%',
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 20,
   },
 });
 

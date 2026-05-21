@@ -19,11 +19,16 @@ const CustomButton = ({text, onPress, isLoading}) => {
 export default CustomButton
 const styles = StyleSheet.create({
     btn: {
-        backgroundColor: "#007bff",
+        backgroundColor: "#FF8C00",
         height: 50, 
         width: '100%',
         justifyContent: 'center',
-        borderRadius: 99
+        borderRadius: 99,
+        elevation: 4,
+        shadowColor: '#E85D04',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
     },
     btnText: {
         color: '#fff',

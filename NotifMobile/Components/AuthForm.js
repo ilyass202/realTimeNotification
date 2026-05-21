@@ -53,17 +53,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1, 
         justifyContent: 'center',
-        backgroundColor: '#b4b5d1',
+        backgroundColor: '#FFF8F0',
         margin: 20,
-        borderRadius: 10,
+        borderRadius: 15,
         padding: 20,
-        opacity: 0.9,
         height: 400,
+        elevation: 5,
+        borderWidth: 2,
+        borderColor: '#FFB84D',
     },
     linkText: {
-        color: '#007bff',
+        color: '#FF8C00',
         marginTop: 15,
         textAlign: 'center',
         justifyContent: 'center',
+        fontSize: 16,
+        fontWeight: '600',
     }
 })

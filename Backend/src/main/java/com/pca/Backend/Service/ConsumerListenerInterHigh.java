@@ -22,7 +22,7 @@ public class ConsumerListenerInterHigh {
         try {
             var json = mapper.readTree(message);
             Long userId = json.path("user_id").asLong();
-            Long destinataireId = json.path("destinataire").asLong();
+            Long destinataireId = json.path("destinataire_id").asLong();
             Long amount = json.path("amount").asLong();
             String eventId = UUID.randomUUID().toString().substring(0, 8);
 

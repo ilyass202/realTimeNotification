@@ -28,8 +28,8 @@ public class ConsumerListenerCardInter {
     public void consume(String message) {
         try {
             var json = mapper.readTree(message);
-            Long userId = json.path("userId").asLong();
-            Long amount = json.path("minAmount").asLong();
+            Long userId = json.path("user_id").asLong();
+            Long amount = json.path("min_amount").asLong();
             String eventId = UUID.randomUUID().toString().substring(0, 8);
             NotifEnrechi notifEnrechi = new NotifEnrechi(
                 userId,
@@ -51,7 +51,7 @@ public class ConsumerListenerCardInter {
             return "carte crée avec succès, il faut disposer un montant";
         }
         else {
-            return "carte créé avec succès";
+            return "carte crée avec succès";
         }
     }
 }

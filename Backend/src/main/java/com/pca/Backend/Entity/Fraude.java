@@ -27,5 +27,6 @@ public class Fraude {
     private String alertType;
     private String alertMessage;
     private LocalDateTime createdAt = LocalDateTime.now();
+    private Long destinataireId;
 
 }

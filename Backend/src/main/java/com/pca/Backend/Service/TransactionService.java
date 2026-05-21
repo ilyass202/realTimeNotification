@@ -31,9 +31,9 @@ public class TransactionService {
         }
         boolean isFraud = fraudeMockService.isFraudVirement(virement);
         if(isFraud){
-            var fraude = Fraude.builder().userId(virement.userId()).amount(virement.amount()).alertType("fraude").alertMessage("fraude detectée").build();
-            fraudeRepo.save(fraude);
-            return new VirementResponse("fraude detectée", null);
+            var fraude = Fraude.builder().userId(virement.userId()).amount(virement.amount()).destinataireId(virement.destinataireId()).alertType("fraude").alertMessage("fraude detectée").createdAt(LocalDateTime.now()).build();
+            var fraudeSauv = fraudeRepo.save(fraude);
+            return new VirementResponse("fraude detectée", fraudeSauv.getId());
         }
         else{
         Transaction transaction = new Transaction();
