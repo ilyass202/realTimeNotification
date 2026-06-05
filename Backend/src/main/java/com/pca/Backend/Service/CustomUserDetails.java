@@ -1,10 +1,12 @@
 package com.pca.Backend.Service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.security.core.userdetails.User;
 import java.util.ArrayList;
 
@@ -26,9 +28,12 @@ public class CustomUserDetails implements UserDetailsService{
        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
     public ReferentielUser signUp(SignUp signUp) {
-        userRepo.findByEmail(signUp.email()).ifPresent(existing -> {
-            throw new RuntimeException("User already exists");
-        });
+        if (userRepo.findByEmail(signUp.email()).isPresent()) {
+            throw new ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Un compte existe déjà avec cet email. Utilisez la connexion (login)."
+            );
+        }
 
         ReferentielUser newUser = new ReferentielUser();
         newUser.setName(signUp.name());

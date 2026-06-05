@@ -1,0 +1,62 @@
+# VS Code : extension "REST Client" (humao.rest-client)
+# Remplacer email, password, clientId par vos valeurs (clientId = users.id = userId login)
+
+@baseUrl = http://localhost:8080
+@email = votre.email@example.com
+@password = votreMotDePasse
+@clientId = 27
+
+### 1 — Login (récupérer userId = clientId)
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+@userId = {{login.response.body.userId}}
+
+### 2 — Lire les préférences (charger les switches React)
+GET {{baseUrl}}/api/alerts/{{clientId}}
+Authorization: Basic {{email}} {{password}}
+
+### 3 — Créer le référentiel (première fois, si GET 404)
+POST {{baseUrl}}/api/alerts
+Authorization: Basic {{email}} {{password}}
+Content-Type: application/json
+
+{
+  "clientId": {{clientId}},
+  "alerteTransaction": true,
+  "alerteFraude": true,
+  "alerteCarte": true,
+  "active": true,
+  "blackList": false,
+  "telephone": "0612345678"
+}
+
+### 4 — Mettre à jour UN switch (PATCH partiel)
+PATCH {{baseUrl}}/api/alerts/{{clientId}}
+Authorization: Basic {{email}} {{password}}
+Content-Type: application/json
+
+{
+  "alerteTransaction": false
+}
+
+### 5 — Sauvegarder TOUS les switches (PUT — recommandé pour l'écran paramètres)
+PUT {{baseUrl}}/api/alerts/{{clientId}}
+Authorization: Basic {{email}} {{password}}
+Content-Type: application/json
+
+{
+  "alerteTransaction": true,
+  "alerteFraude": true,
+  "alerteCarte": false,
+  "active": true,
+  "blackList": false,
+  "telephone": "0612345678"
+}

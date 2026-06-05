@@ -25,11 +25,11 @@ public class TopicsConfig {
     }
     @Bean
     public NewTopic TopicEnrechissement(){
-        return new NewTopic("transaction-enrechissement", 2, (short) 1);
+        return new NewTopic("transaction-enrechissement", 6, (short) 1);
     }
     @Bean 
     public NewTopic topicIntermediaire(){
-        return new NewTopic("transaction-intermediare", 2, (short)1);
+        return new NewTopic("transaction-intermediare", 6, (short) 1);
     }
     @Bean 
     public NewTopic topicIntermediaireCritique(){
@@ -37,10 +37,10 @@ public class TopicsConfig {
     }
     @Bean
     public NewTopic topicCardIntermediare(){
-         return new NewTopic("card-intermediare", 2, (short)1);
+         return new NewTopic("card-intermediare", 4, (short) 1);
     }
     @Bean
     public NewTopic topicCardEnrichissement() {
-        return new NewTopic("card-enrichissement", 2, (short) 1);
+        return new NewTopic("card-enrichissement", 4, (short) 1);
     }
 }

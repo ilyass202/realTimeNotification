@@ -18,28 +18,23 @@ const Register = ({ navigation }) => {
       const object = {
         name: values.name,
         email: values.email,
-        password: values.password
-      }
-      const data = await register(object).unwrap()
-      .then((response) => {
-        AsyncStorage.setItem('credentials', JSON.stringify(object));
-        return response
-      });
-      const userId = data?.userId || data?.id;
+        password: values.password,
+      };
+      const data = await register(object).unwrap();
+      await AsyncStorage.setItem('credentials', JSON.stringify(object));
+
+      const userId = data?.userId ?? data?.id;
       if (!userId) throw new Error('ID utilisateur manquant dans la réponse de création');
       dispatch(setUserId(userId));
 
       await Notification.requestPermission();
       const fcmToken = await Notification.getToken();
-      console.log(fcmToken);
-      console.log(userId);
       if (fcmToken) {
         const response = await saveToken({ userId, fcmToken });
-        if(response?.error){
-          console.log("error");
-        }
-        else{
-          console.log("Token saved successfully");
+        if (response?.error) {
+          console.log('error');
+        } else {
+          console.log('Token saved successfully');
         }
       }
 
@@ -61,9 +56,7 @@ const Register = ({ navigation }) => {
     navigation.replace('Login');
   };
 
-  return (
-  <AuthForm isLogin={false} submitForm={submitForm} navigate={navigate} />
-  )
+  return <AuthForm isLogin={false} submitForm={submitForm} navigate={navigate} />;
 };
 
 export default Register;

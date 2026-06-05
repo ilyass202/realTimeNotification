@@ -1,5 +1,7 @@
 package com.pca.Backend.Controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,14 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
     private final ServiceAuth auth;
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody SignUp signUp){
+    public ResponseEntity<?> registerUser(@RequestBody SignUp signUp) {
         ReferentielUser user = auth.signUp(signUp);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(Map.of(
+            "id", user.getId(),
+            "name", user.getName(),
+            "email", user.getEmail(),
+            "message", "Compte créé. Connectez-vous avec POST /api/auth/login"
+        ));
     }
    @PostMapping("/login")
    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){

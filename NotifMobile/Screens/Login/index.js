@@ -3,27 +3,23 @@ import { Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { setUserId } from '../../Store/Slices/UserSlice';
 import AuthForm from '../../Components/AuthForm';
-import Notification from '../../service/NotificationService';
-import { useSaveTokenMutation } from '../../Store/HttpSlices/tokenSlice';
 import { useLoginMutation } from '../../Store/HttpSlices/authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [login] = useLoginMutation();
-  const [saveToken] = useSaveTokenMutation();
   const submitForm = async (values) => {
     try {
-      const data = await login({ email: values.email, password: values.password }).unwrap();
+      const credentials = {
+        email: values.email,
+        password: values.password,
+      };
+      const data = await login(credentials).unwrap();
+      await AsyncStorage.setItem('credentials', JSON.stringify(credentials));
       const userId = data?.userId || data?.id;
       if (!userId) throw new Error('ID utilisateur manquant dans la réponse de connexion');
       dispatch(setUserId(userId));
-
-      /*await Notification.requestPermission();
-      const token = await Notification.getToken();
-      if (token) {
-        await saveToken({ userId, token });
-      }*/
-
       navigation.replace('Home');
     } catch (error) {
       let errorMessage = 'Une erreur est survenue';

@@ -1,5 +1,5 @@
 
-export const BASE_URL = 'http://192.168.0.112:8080'
+export const BASE_URL = 'http://192.168.10.7:8080'
 
 // Orange Theme Colors
 export const COLORS = {

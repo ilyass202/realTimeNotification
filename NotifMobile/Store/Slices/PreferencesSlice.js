@@ -2,12 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   notificationSettings: {
-    transaction: true,
-    payment: true,
-    promotion: false,
-    security: false,
-    reminder: false,
-    creationCarte: false,
+    alerteTransaction: true,
+    alerteFraude: true,
+    alerteCarte: true,
+    active: true,
+    blackList: false,
   },
 };
 
